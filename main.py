@@ -108,6 +108,7 @@ instructionmap = {
     "what was the %s thing you said %s":lambda s: stack.append(str(stack[-(int(s)+1)])[int(s)]),
     "%s needs more character development":charify,
     "%s said he has a lot of girls if he is lying i would":if_func,
+    "%s said he has a lot of guys if he is lying i would":if_func,
     "%s has too much main character energy":asciify,
     "decapitate %s":numify,
     "recapitate %s":strify,
