@@ -71,15 +71,19 @@ def run_func_on_ranges(func, *range_strs):
     for args in zip(*range_lists):
         func(*args)
 
-def repeat(num:str):
+def repeat(past,num:str):
+    past = int(past)
     if num == "infinite" or num == "inf":
-        result = find_matching_pattern(code[idx-1].split("#")[0].strip(),list(instructionmap.keys()))
         while True:
-            run_func_on_ranges(list(instructionmap.values())[result[0]], *result[2])
+            for eye in range(past,-1,-1):
+                result = find_matching_pattern(code[idx-eye-1].split("#")[0].strip(),list(instructionmap.keys()))
+                run_func_on_ranges(list(instructionmap.values())[result[0]], *result[2])
     else:
-        result = find_matching_pattern(code[idx-1].split("#")[0].strip(),list(instructionmap.keys()))
         for _ in range(int(num)):
-            run_func_on_ranges(list(instructionmap.values())[result[0]], *result[2])
+            for eye in range(idx-past,idx,1):
+                result = find_matching_pattern(code[eye].split("#")[0].strip(),list(instructionmap.keys()))
+                if debug:print(result,code[eye].split("#")[0].strip(),list(range(past,0,-1)))
+                run_func_on_ranges(list(instructionmap.values())[result[0]], *result[2])
 
 def if_func(s):
     if stack[-(int(s)+1)] <= 0:
@@ -112,7 +116,7 @@ instructionmap = {
     "%s has too much main character energy":asciify,
     "decapitate %s":numify,
     "recapitate %s":strify,
-    "repeat that %s more times":repeat,
+    "repeat the last %s instructions %s more times":repeat,
     "commit mass murder but leave a note %s":lambda s: exit(int(s))
 }
 try:
@@ -129,5 +133,4 @@ try:
 except BaseException as e:
     import os
     e.add_note(f"File {os.path.abspath(sys.argv[1])}, line {idx+1}\n    {i}")
-    raise e
 if debug:stack.reverse();print(stack)
